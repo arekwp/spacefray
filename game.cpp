@@ -5,5 +5,3 @@ int main(){
 	return 0;
 }
 
-/* bla bla bienio tu byl
- * /
