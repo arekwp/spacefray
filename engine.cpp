@@ -20,7 +20,7 @@ class Exp_List;
 class Manage;
 class Engine;
 
-BITMAP *bufor, *back, *p1_gfx, *p2_gfx, *hp_bar_gfx;
+BITMAP *bufor, *back, *p1_gfx, *p2_gfx, *hp_bar_gfx, *menu_gfx, *item_gfx;
 BITMAP *b1_gfx, *b2_gfx, *b3_gfx, *b4_gfx, *b_gfx;
 BITMAP *b11_gfx, *b12_gfx, *b13_gfx, *b14_gfx, *b15_gfx, *b16_gfx, *b17_gfx, *b18_gfx, *b19_gfx;
 BITMAP *e1_gfx, *e2_gfx, *e3_gfx, *e4_gfx, *e5_gfx, *e6_gfx, *e_gfx;
@@ -454,23 +454,23 @@ class Manage{ // wiekszosc funkcji potrzebnych do wyzej wypisanych klas
 		if(key[KEY_5]) p1.weapon = 5;
 		if(key[KEY_E]) E_list.dodaj((rand()%(scr.x-100))+50,rand()%7+1);
 		if(key[KEY_B]) Bon_list.dodaj((rand()%(scr.x-100))+50,rand()%4+1);
-		if(mouse_b && freq%5 == 0) fire(freq,p1);
+		if(mouse_b) fire(freq,p1);
 	}
 	void keys_multi(int freq){
 		if(key[KEY_E]) E_list.dodaj((rand()%(scr.x-100))+50,rand()%6+1);
 		if(key[KEY_B]) Bon_list.dodaj((rand()%(scr.x-100))+50,rand()%4+1);
 		// Player 1 sterowanie
-		if(key[KEY_A] && p1.x-5 >= 0) p1.x -=5;
-		if(key[KEY_D] && 5+p1.x+p1_gfx->w < scr.x) p1.x +=5;
-		if(key[KEY_W] && p1.y-5 >= 30) p1.y -=5;
-		if(key[KEY_S] && 5+p1.y+p1_gfx->h <= scr.y) p1.y +=5;
-		if(key[KEY_R] && freq%5 == 0) fire(freq,p1);
+		if(key[KEY_A] && p1.x-5 >= 0) p1.x -=10;
+		if(key[KEY_D] && 5+p1.x+p1_gfx->w < scr.x) p1.x +=10;
+		if(key[KEY_W] && p1.y-5 >= 30) p1.y -=10;
+		if(key[KEY_S] && 5+p1.y+p1_gfx->h <= scr.y) p1.y +=10;
+		if(key[KEY_R]) fire(freq,p1);
 		// Player 2 sterowanie
-		if(key[KEY_LEFT] && p2.x-5 >= 0) p2.x -=5;
-		if(key[KEY_RIGHT] && 5+p2.x+p2_gfx->w < scr.x) p2.x +=5;
-		if(key[KEY_UP] && p2.y-5 >= 30) p2.y -=5;
-		if(key[KEY_DOWN] && 5+p2.y+p2_gfx->h <= scr.y) p2.y +=5;
-		if(key[KEY_L] && freq%5 == 0) fire(freq,p2);
+		if(key[KEY_LEFT] && p2.x-5 >= 0) p2.x -=10;
+		if(key[KEY_RIGHT] && 5+p2.x+p2_gfx->w < scr.x) p2.x +=10;
+		if(key[KEY_UP] && p2.y-5 >= 30) p2.y -=10;
+		if(key[KEY_DOWN] && 5+p2.y+p2_gfx->h <= scr.y) p2.y +=10;
+		if(key[KEY_L]) fire(freq,p2);
 	}
 	void single_values(){
 		p1.start_val();
@@ -488,8 +488,7 @@ class Manage{ // wiekszosc funkcji potrzebnych do wyzej wypisanych klas
 	}
 	void refresh(){
 		clear_to_color(bufor, makecol(0,0,0));
-		//blit(back, bufor,0,0,0,0, back->w, back->h);
-		stretch_blit(back,bufor, 0,0,back->w,back->h,0,0,scr.x,scr.y); //////////////////////////////////////////////////////////////////////////
+		stretch_blit(back,bufor, 0,0,back->w,back->h,0,0,scr.x,scr.y);
 		E_list.move_and_refresh();
 		B_list.move_and_refresh();
 		Bon_list.move_and_refresh();
@@ -499,7 +498,7 @@ class Manage{ // wiekszosc funkcji potrzebnych do wyzej wypisanych klas
 	}
 	void refresh_multi(){
 		clear_to_color(bufor, makecol(0,0,0));
-		masked_blit(back, bufor,0,0,0,0, back->w, back->h);
+		stretch_blit(back,bufor, 0,0,back->w,back->h,0,0,scr.x,scr.y);
 		E_list.move_and_refresh();
 		B_list.move_and_refresh();
 		Bon_list.move_and_refresh();
@@ -552,17 +551,17 @@ class Manage{ // wiekszosc funkcji potrzebnych do wyzej wypisanych klas
 	void fire(int freq, Player &p){
 		if (p.lifes <=0 && p.hp <=0) return;
 		int half=((p1_gfx->w)/2)-2;
-		if(p1.weapon == 1 && freq%5==0) B_list.dodaj(p.x+half,p.y,1,0);
-		else if(p1.weapon == 2 && freq%5==0){
+		if(p.weapon == 1 && freq%5==0) B_list.dodaj(p.x+half,p.y,1,0);
+		else if(p.weapon == 2 && freq%5==0){
 			B_list.dodaj(p.x+half-22,p.y,1,0);
 			B_list.dodaj(p.x+half+22,p.y,1,0);
 		}
-		else if(p1.weapon == 3 && freq%5==0){
+		else if(p.weapon == 3 && freq%5==0){
 			B_list.dodaj(p.x+half-22,p.y,1,0);
 			B_list.dodaj(p.x+half+22,p.y,1,0);
 			if(freq%10==0) B_list.dodaj(p.x+half,p.y,2,0);
 		}
-		else if(p1.weapon == 4 && freq%5==0){
+		else if(p.weapon == 4 && freq%5==0){
 			B_list.dodaj(p.x+half-22,p.y,1,0);
 			B_list.dodaj(p.x+half+22,p.y,1,0);
 			if(freq%10==0) B_list.dodaj(p.x+half,p.y,2,0);
@@ -571,7 +570,7 @@ class Manage{ // wiekszosc funkcji potrzebnych do wyzej wypisanych klas
 			if(p.bullet_side) p.bullet_side=0;
 			else p.bullet_side=1;
 		}
-		else if(p1.weapon == 5 && freq%5==0){
+		else if(p.weapon == 5 && freq%5==0){
 			B_list.dodaj(p.x+half-22,p.y,1,0);
 			B_list.dodaj(p.x+half+22,p.y,1,0);
 			if(freq%10==0) B_list.dodaj(p.x+half,p.y,2,0);
@@ -788,6 +787,8 @@ class Engine{ // zarzadzanie cala gra
 		bonus3_gfx = load_png("grafika/bonus3.png",default_palette);
 		bonus4_gfx = load_png("grafika/bonus4.png",default_palette);
 		back = load_png("grafika/back.png",default_palette);
+		menu_gfx = load_png("grafika/menu.png",default_palette);
+		item_gfx = load_png("grafika/item.png",default_palette);
 		hp_bar_gfx = load_tga("grafika/hp_bar.tga",default_palette);
 		fps = 60;
 		freq = 0;
@@ -823,12 +824,43 @@ class Engine{ // zarzadzanie cala gra
 		destroy_bitmap(bonus2_gfx);
 		destroy_bitmap(bonus3_gfx);
 		destroy_bitmap(bonus4_gfx);
+		destroy_bitmap(menu_gfx);
+		destroy_bitmap(item_gfx);
 		//destroy_bitmap(b_gfx);
 		//destroy_bitmap(e_gfx);
 		allegro_exit();
 	}
 	void menu(){
+		int menu_item=0;
 		while(!key[KEY_ESC] && !change){
+			rest(1000/20);
+			clear_to_color(bufor, makecol(0,0,0));
+			stretch_blit(menu_gfx,bufor, 0,0,menu_gfx->w,menu_gfx->h,0,0,scr.x,scr.y);
+			if(key[KEY_UP]){
+				menu_item--;
+				if(menu_item<0) menu_item=5;
+			}
+			if(key[KEY_DOWN]){
+				menu_item++;
+				if(menu_item>5) menu_item=0;
+			}
+			if(key[KEY_ENTER]){
+				if(menu_item==0) single_mode();
+				if(menu_item==1) multi_mode();
+				if(menu_item==2) settings();
+				if(menu_item==5) break;
+				rest(50);
+			}
+			if(menu_item==0) draw_trans_sprite(bufor, item_gfx, 580*scr.x/1024, 275*scr.y/768);
+			else if(menu_item==1) draw_trans_sprite(bufor, item_gfx, 525*scr.x/1024, 355*scr.y/768);
+			else if(menu_item==2) draw_trans_sprite(bufor, item_gfx, 490*scr.x/1024, 430*scr.y/768);
+			else if(menu_item==3) draw_trans_sprite(bufor, item_gfx, 480*scr.x/1024, 515*scr.y/768);
+			else if(menu_item==4) draw_trans_sprite(bufor, item_gfx, 490*scr.x/1024, 590*scr.y/768);
+			else if(menu_item==5) draw_trans_sprite(bufor, item_gfx, 510*scr.x/1024, 680*scr.y/768);
+			rest(10);
+			blit(bufor,screen,0,0,0,0,scr.x,scr.y);
+		}
+		/*while(!key[KEY_ESC] && !change){
 			rest(1000/20);
 			clear_to_color(bufor, makecol(0,0,0));
 			textprintf_ex(bufor,font,10,10,makecol(200,200,200),-1,"1) Signle player");
@@ -841,7 +873,7 @@ class Engine{ // zarzadzanie cala gra
 			if(key[KEY_1]) single_mode();
 			if(key[KEY_2]) multi_mode();
 			if(key[KEY_3]) settings();
-		}
+		}*/
 	}
 	void single_mode(){
 		m.single_values(); 
