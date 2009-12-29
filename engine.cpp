@@ -832,8 +832,8 @@ class Engine{ // zarzadzanie cala gra
 	}
 	void menu(){
 		int menu_item=0;
-		while(!key[KEY_ESC] && !change){
-			rest(1000/20);
+		while(!change){
+			//rest(1000/30);
 			clear_to_color(bufor, makecol(0,0,0));
 			stretch_blit(menu_gfx,bufor, 0,0,menu_gfx->w,menu_gfx->h,0,0,scr.x,scr.y);
 			if(key[KEY_UP]){
@@ -849,7 +849,6 @@ class Engine{ // zarzadzanie cala gra
 				if(menu_item==1) multi_mode();
 				if(menu_item==2) settings();
 				if(menu_item==5) break;
-				rest(50);
 			}
 			if(menu_item==0) draw_trans_sprite(bufor, item_gfx, 580*scr.x/1024, 275*scr.y/768);
 			else if(menu_item==1) draw_trans_sprite(bufor, item_gfx, 525*scr.x/1024, 355*scr.y/768);
@@ -857,23 +856,9 @@ class Engine{ // zarzadzanie cala gra
 			else if(menu_item==3) draw_trans_sprite(bufor, item_gfx, 480*scr.x/1024, 515*scr.y/768);
 			else if(menu_item==4) draw_trans_sprite(bufor, item_gfx, 490*scr.x/1024, 590*scr.y/768);
 			else if(menu_item==5) draw_trans_sprite(bufor, item_gfx, 510*scr.x/1024, 680*scr.y/768);
-			rest(10);
 			blit(bufor,screen,0,0,0,0,scr.x,scr.y);
+			readkey();
 		}
-		/*while(!key[KEY_ESC] && !change){
-			rest(1000/20);
-			clear_to_color(bufor, makecol(0,0,0));
-			textprintf_ex(bufor,font,10,10,makecol(200,200,200),-1,"1) Signle player");
-			textprintf_ex(bufor,font,10,30,makecol(200,200,200),-1,"2) Multi player");
-			textprintf_ex(bufor,font,10,50,makecol(200,200,200),-1,"3) Options");
-			textprintf_ex(bufor,font,10,70,makecol(200,200,200),-1,"4) Help");
-			textprintf_ex(bufor,font,10,90,makecol(200,200,200),-1,"5) About");
-			textprintf_ex(bufor,font,10,110,makecol(200,200,200),-1,"ESC) Exit");
-			blit(bufor,screen,0,0,0,0,scr.x,scr.y);
-			if(key[KEY_1]) single_mode();
-			if(key[KEY_2]) multi_mode();
-			if(key[KEY_3]) settings();
-		}*/
 	}
 	void single_mode(){
 		m.single_values(); 
